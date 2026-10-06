@@ -1,0 +1,58 @@
+{
+  "name": "Neon Canopy",
+  "level_index": 2,
+  "difficulty": 5,
+  "world_width": 4200,
+  "world_height": 950,
+  "spawn": { "x": 100, "y": 750 },
+  "exit": { "x": 4050, "y": 640, "width": 64, "height": 90 },
+  "platforms": [
+    { "x": 0, "y": 820, "width": 650, "height": 130, "type": "ground" },
+    { "x": 380, "y": 680, "width": 160, "height": 24, "type": "floating" },
+    { "x": 620, "y": 560, "width": 180, "height": 24, "type": "floating" },
+    { "x": 880, "y": 480, "width": 160, "height": 20, "type": "oneway" },
+    { "x": 1120, "y": 820, "width": 700, "height": 130, "type": "ground" },
+    { "x": 1300, "y": 680, "width": 200, "height": 24, "type": "floating" },
+    { "x": 1580, "y": 550, "width": 180, "height": 24, "type": "floating" },
+    { "x": 1900, "y": 620, "width": 160, "height": 20, "type": "oneway" },
+    { "x": 2150, "y": 820, "width": 750, "height": 130, "type": "ground" },
+    { "x": 2350, "y": 690, "width": 160, "height": 24, "type": "floating" },
+    { "x": 2600, "y": 580, "width": 180, "height": 24, "type": "floating" },
+    { "x": 2850, "y": 490, "width": 160, "height": 20, "type": "oneway" },
+    { "x": 3100, "y": 820, "width": 1100, "height": 130, "type": "ground" },
+    { "x": 3350, "y": 690, "width": 200, "height": 24, "type": "floating" },
+    { "x": 3650, "y": 570, "width": 220, "height": 24, "type": "floating" }
+  ],
+  "enemies": [
+    { "x": 450, "y": 770, "type": "walker", "patrol": 100 },
+    { "x": 700, "y": 510, "type": "fast", "patrol": 70 },
+    { "x": 1350, "y": 770, "type": "chaser", "patrol": 150 },
+    { "x": 1620, "y": 500, "type": "fast", "patrol": 80 },
+    { "x": 2400, "y": 770, "type": "chaser", "patrol": 140 },
+    { "x": 2650, "y": 530, "type": "walker", "patrol": 70 },
+    { "x": 3400, "y": 770, "type": "chaser", "patrol": 160 },
+    { "x": 3700, "y": 520, "type": "fast", "patrol": 100 }
+  ],
+  "coins": [
+    { "x": 420, "y": 630 },
+    { "x": 660, "y": 510 },
+    { "x": 920, "y": 430 },
+    { "x": 1340, "y": 630 },
+    { "x": 1380, "y": 630 },
+    { "x": 1620, "y": 500 },
+    { "x": 2390, "y": 640 },
+    { "x": 2640, "y": 530 },
+    { "x": 2890, "y": 440 },
+    { "x": 3400, "y": 640 },
+    { "x": 3700, "y": 520 }
+  ],
+  "powerups": [
+    { "x": 920, "y": 430, "type": "magnet" },
+    { "x": 1950, "y": 570, "type": "shield" },
+    { "x": 2890, "y": 440, "type": "health_crystal" },
+    { "x": 3720, "y": 520, "type": "speed_boost" }
+  ],
+  "checkpoints": [
+    { "x": 2180, "y": 740 }
+  ]
+}
