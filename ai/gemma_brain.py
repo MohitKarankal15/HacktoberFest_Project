@@ -22,7 +22,7 @@ class GemmaBrain:
         # AI Backend configuration
         self.api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
         self.ollama_url = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
-        self.model_name = os.environ.get("GEMMA_MODEL", "gemma-4-31b-it")
+        self.model_name = os.environ.get("GEMMA_MODEL", "gemma-4-26b-a4b-it")
 
         # Logging configuration
         os.makedirs("logs", exist_ok=True)
