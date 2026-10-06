@@ -142,7 +142,19 @@ class GemmaBrain:
             # 3. Always pass through safety validator
             val_result = validate_decision(decision_dict, game_state)
 
-            # 4. Enqueue validated result for main game loop
+            # 4. Write to physical log file
+            try:
+                with open("gemma.log", "a", encoding="utf-8") as log_file:
+                    timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+                    source = "Fallback" if is_fallback else "Gemma"
+                    log_file.write(f"[{timestamp}] [{source}] [Latency: {latency:.2f}s] [Status: {val_result.status}]\n")
+                    log_file.write(f"Decision: {json.dumps(val_result.sanitized_decision)}\n")
+                    log_file.write(f"Reason: {val_result.reason}\n")
+                    log_file.write("-" * 50 + "\n")
+            except Exception as e:
+                print(f"Failed to write to gemma.log: {e}")
+
+            # 5. Enqueue validated result for main game loop
             self.response_queue.put((val_result, latency, is_fallback))
             self.request_queue.task_done()
 
