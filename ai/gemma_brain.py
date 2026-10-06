@@ -187,13 +187,13 @@ class GemmaBrain:
                 from google import genai
                 client = genai.Client(api_key=self.api_key)
                 response = client.models.generate_content(
-                    model="gemini-2.5-flash",
+                    model="gemini-3.8-flash",
                     contents=f"{system_prompt}\n\n{user_prompt}"
                 )
                 if response and response.text:
                     return response.text
-            except Exception:
-                pass
+            except Exception as e:
+                print(f"GenAI API Error: {e}")
 
         # Option B: Local Ollama Gemma
         try:
