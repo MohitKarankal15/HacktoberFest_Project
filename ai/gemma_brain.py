@@ -125,6 +125,7 @@ class GemmaBrain:
             start_time = time.time()
             decision_dict = None
             is_fallback = False
+            raw_response = None
 
             # 1. Attempt Gemma Inference via available backend
             try:
@@ -152,8 +153,20 @@ class GemmaBrain:
                 with open(self.log_filename, "a", encoding="utf-8") as log_file:
                     timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
                     source = "Fallback" if is_fallback else "Gemma"
+                    
+                    api_key_status = "None"
+                    if self.api_key:
+                        api_key_status = f"{self.api_key[:4]}***{self.api_key[-4:]}" if len(self.api_key) > 8 else "***"
+                    
                     log_file.write(f"[{timestamp}] [{source}] [Latency: {latency:.2f}s] [Status: {val_result.status}]\n")
+                    log_file.write(f"API Key Used: {api_key_status}\n")
                     log_file.write(f"Player State: {json.dumps(game_state)}\n")
+                    
+                    if raw_response and not is_fallback:
+                        # Clean up raw response for logging to avoid multi-line breaks if it's too long
+                        clean_raw = raw_response.replace('\n', ' ')
+                        log_file.write(f"Gemma's Raw Thought Process: {clean_raw}\n")
+                        
                     log_file.write(f"Decision: {json.dumps(val_result.sanitized_decision)}\n")
                     log_file.write(f"Reason: {val_result.reason}\n")
                     log_file.write("-" * 50 + "\n")
