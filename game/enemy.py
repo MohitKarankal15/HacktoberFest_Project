@@ -102,9 +102,11 @@ class Enemy:
 class WebHero(Enemy):
     def __init__(self, x, y):
         super().__init__(x, y, enemy_type="web_hero", patrol_distance=160)
-        self.base_speed = 2.0
-        self.attack_range = 300
-        self.attack_cooldown = 2.0
+        self.base_speed = 2.2
+        self.health = 2
+        self.damage = 15
+        self.attack_range = 320
+        self.attack_cooldown = 1.8
 
     def behavior(self, dt, player):
         dist = self.get_distance_to_player(player)
@@ -128,11 +130,14 @@ class WebHero(Enemy):
 
 
 class BlastHero(Enemy):
+    """Iron Man inspired — hovers at range, fires energy blasts, retreats if too close."""
     def __init__(self, x, y):
         super().__init__(x, y, enemy_type="blast_hero", patrol_distance=200)
-        self.base_speed = 1.5
-        self.attack_range = 400
-        self.attack_cooldown = 2.5
+        self.base_speed = 1.8
+        self.health = 3
+        self.damage = 20
+        self.attack_range = 450
+        self.attack_cooldown = 2.0
 
     def behavior(self, dt, player):
         dist = self.get_distance_to_player(player)
@@ -167,11 +172,14 @@ class BlastHero(Enemy):
 
 
 class DarkHero(Enemy):
+    """Batman inspired — fast aggressive chaser, throws batarangs, relentless pursuit."""
     def __init__(self, x, y):
         super().__init__(x, y, enemy_type="dark_hero", patrol_distance=180)
-        self.base_speed = 2.5
-        self.attack_range = 350
-        self.attack_cooldown = 2.0
+        self.base_speed = 3.0
+        self.health = 3
+        self.damage = 25
+        self.attack_range = 380
+        self.attack_cooldown = 1.5
 
     def behavior(self, dt, player):
         dist = self.get_distance_to_player(player)

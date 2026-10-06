@@ -34,7 +34,7 @@ class GameEngine:
         # Engine state
         self.state = "intro"  # "intro", "menu", "playing", "paused", "howtoplay", "aibrain", "gameover", "victory"
         self.current_level_index = 1
-        self.max_levels = 3
+        self.max_levels = 6
 
         # Fonts
         self.font_title = pygame.font.SysFont("Arial", 40, bold=True)
