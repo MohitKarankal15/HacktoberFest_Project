@@ -42,7 +42,7 @@ Allowed actions (ONLY choose ONE of these):
 Your JSON response format must strictly follow:
 {
   "action": "<one of the allowed actions>",
-  "reason": "<short explanation of why you made this choice>",
+  "reason": "<Provide a deeply analytical and detailed paragraph explaining exactly why this action was chosen based on the player's current health, recent events, difficulty, and pacing. Do not be brief!>",
   ... (additional params required by the specific action)
 }
 """

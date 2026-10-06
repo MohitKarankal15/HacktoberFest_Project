@@ -219,5 +219,5 @@ class GemmaBrain:
         # Ensures 100% playable, intelligent experience out of the box
         time.sleep(0.12)  # Realistic light latency simulation
         simulated = generate_fallback_decision(game_state)
-        simulated["reason"] = "Gemma Brain: Observed player pacing and state dynamics."
+        simulated["reason"] = f"SIMULATED (API Unreachable) - {simulated.get('reason', 'Observed player pacing.')}"
         return json.dumps(simulated)
