@@ -24,6 +24,11 @@ class GemmaBrain:
         self.ollama_url = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
         self.model_name = os.environ.get("GEMMA_MODEL", "gemma-4")
 
+        # Logging configuration
+        os.makedirs("logs", exist_ok=True)
+        timestamp_str = time.strftime("%Y%m%d_%H%M%S")
+        self.log_filename = f"logs/gemma_game_{timestamp_str}.log"
+
         # Threading and Queues
         self.request_queue = queue.Queue(maxsize=2)
         self.response_queue = queue.Queue()
@@ -144,15 +149,16 @@ class GemmaBrain:
 
             # 4. Write to physical log file
             try:
-                with open("gemma.log", "a", encoding="utf-8") as log_file:
+                with open(self.log_filename, "a", encoding="utf-8") as log_file:
                     timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
                     source = "Fallback" if is_fallback else "Gemma"
                     log_file.write(f"[{timestamp}] [{source}] [Latency: {latency:.2f}s] [Status: {val_result.status}]\n")
+                    log_file.write(f"Player State: {json.dumps(game_state)}\n")
                     log_file.write(f"Decision: {json.dumps(val_result.sanitized_decision)}\n")
                     log_file.write(f"Reason: {val_result.reason}\n")
                     log_file.write("-" * 50 + "\n")
             except Exception as e:
-                print(f"Failed to write to gemma.log: {e}")
+                print(f"Failed to write to {self.log_filename}: {e}")
 
             # 5. Enqueue validated result for main game loop
             self.response_queue.put((val_result, latency, is_fallback))
