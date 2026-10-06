@@ -22,7 +22,7 @@ class GemmaBrain:
         # AI Backend configuration
         self.api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
         self.ollama_url = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/generate")
-        self.model_name = os.environ.get("GEMMA_MODEL", "gemma-4")
+        self.model_name = os.environ.get("GEMMA_MODEL", "gemma-4-31b-it")
 
         # Logging configuration
         os.makedirs("logs", exist_ok=True)
@@ -187,7 +187,7 @@ class GemmaBrain:
                 from google import genai
                 client = genai.Client(api_key=self.api_key)
                 response = client.models.generate_content(
-                    model="gemini-3.8-flash",
+                    model=self.model_name,
                     contents=f"{system_prompt}\n\n{user_prompt}"
                 )
                 if response and response.text:
