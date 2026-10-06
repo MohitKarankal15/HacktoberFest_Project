@@ -72,6 +72,19 @@ class Enemy:
                     self.y = p.rect.top - self.height
                     self.vy = 0
                     self.is_grounded = True
+                    
+        # Edge detection for patrolling
+        if self.is_grounded and self.state == "patrol" and self.vx != 0:
+            edge_x = self.rect.right if self.vx > 0 else self.rect.left - 2
+            edge_rect = pygame.Rect(edge_x, self.rect.bottom, 2, 5)
+            has_floor = False
+            for p in platforms:
+                if edge_rect.colliderect(p.rect):
+                    has_floor = True
+                    break
+            if not has_floor:
+                self.vx = 0
+                self.direction *= -1
 
     def take_stomp(self):
         self.health -= 1
@@ -157,18 +170,46 @@ class BlastHero(Enemy):
                 self.vx = 0
                 self.state = "aim"
                 
+            # Vertical hover towards player
+            if player.y + player.height/2 < self.y + self.height/2 - 20:
+                self.vy = -effective_speed * 0.8
+            elif player.y + player.height/2 > self.y + self.height/2 + 20:
+                self.vy = effective_speed * 0.8
+            else:
+                self.vy = 0
+                
             if self.cooldown_timer <= 0:
                 self.state = "attack"
                 self.vx = 0
+                self.vy = 0
                 proj = EnergyBlast(self.x + self.width/2, self.y + self.height/2, player.x + player.width/2, player.y + player.height/2)
                 self.projectiles_to_spawn.append(proj)
                 self.cooldown_timer = self.attack_cooldown
         else:
             self.state = "patrol"
             self.vx = self.direction * effective_speed
+            self.vy = 0
             if abs(self.x - self.start_x) > self.patrol_distance:
                 self.direction *= -1
                 self.x += self.direction * 2
+
+    def apply_physics(self, platforms):
+        # Override to remove gravity for hovering Iron Man
+        self.x += self.vx
+        self.y += self.vy
+        
+        # Basic collision to not fly through walls
+        for p in platforms:
+            if not p.is_oneway and self.rect.colliderect(p.rect):
+                if self.vx > 0 and self.rect.centerx < p.rect.left:
+                    self.x = p.rect.left - self.width
+                elif self.vx < 0 and self.rect.centerx > p.rect.right:
+                    self.x = p.rect.right
+                
+                if self.vy > 0 and self.rect.centery < p.rect.top:
+                    self.y = p.rect.top - self.height
+                elif self.vy < 0 and self.rect.centery > p.rect.bottom:
+                    self.y = p.rect.bottom
 
 
 class DarkHero(Enemy):
@@ -204,9 +245,9 @@ class DarkHero(Enemy):
 def create_enemy(enemy_type, x, y):
     if enemy_type == "web_hero":
         return WebHero(x, y)
-    elif enemy_type == "blast_hero":
+    elif enemy_type in ("blast_hero", "armored_hero"):
         return BlastHero(x, y)
-    elif enemy_type == "dark_hero":
+    elif enemy_type in ("dark_hero", "dark_knight"):
         return DarkHero(x, y)
     else:
         return WebHero(x, y) # Default

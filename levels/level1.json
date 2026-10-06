@@ -1,54 +1,281 @@
 {
   "name": "Emerald Outpost",
   "level_index": 1,
-  "difficulty": 2,
-  "world_width": 3600,
+  "difficulty": 4,
+  "world_width": 5600,
   "world_height": 850,
-  "spawn": { "x": 100, "y": 650 },
-  "exit": { "x": 3450, "y": 630, "width": 64, "height": 90 },
+  "spawn": {
+    "x": 100,
+    "y": 650
+  },
+  "exit": {
+    "x": 5350,
+    "y": 630,
+    "width": 64,
+    "height": 90
+  },
   "platforms": [
-    { "x": 0, "y": 720, "width": 750, "height": 130, "type": "ground" },
-    { "x": 860, "y": 720, "width": 650, "height": 130, "type": "ground" },
-    { "x": 420, "y": 590, "width": 180, "height": 24, "type": "floating" },
-    { "x": 680, "y": 510, "width": 160, "height": 24, "type": "floating" },
-    { "x": 980, "y": 580, "width": 200, "height": 20, "type": "oneway" },
-    { "x": 1600, "y": 720, "width": 800, "height": 130, "type": "ground" },
-    { "x": 1780, "y": 580, "width": 180, "height": 24, "type": "floating" },
-    { "x": 2040, "y": 490, "width": 160, "height": 24, "type": "floating" },
-    { "x": 2280, "y": 580, "width": 180, "height": 20, "type": "oneway" },
-    { "x": 2500, "y": 720, "width": 1100, "height": 130, "type": "ground" },
-    { "x": 2720, "y": 590, "width": 220, "height": 24, "type": "floating" },
-    { "x": 3020, "y": 500, "width": 200, "height": 24, "type": "floating" }
+    {
+      "x": 0,
+      "y": 720,
+      "width": 750,
+      "height": 130,
+      "type": "ground"
+    },
+    {
+      "x": 860,
+      "y": 720,
+      "width": 650,
+      "height": 130,
+      "type": "ground"
+    },
+    {
+      "x": 420,
+      "y": 590,
+      "width": 180,
+      "height": 24,
+      "type": "floating"
+    },
+    {
+      "x": 680,
+      "y": 510,
+      "width": 160,
+      "height": 24,
+      "type": "floating"
+    },
+    {
+      "x": 980,
+      "y": 580,
+      "width": 200,
+      "height": 20,
+      "type": "oneway"
+    },
+    {
+      "x": 1600,
+      "y": 720,
+      "width": 800,
+      "height": 130,
+      "type": "ground"
+    },
+    {
+      "x": 1780,
+      "y": 580,
+      "width": 180,
+      "height": 24,
+      "type": "floating"
+    },
+    {
+      "x": 2040,
+      "y": 490,
+      "width": 160,
+      "height": 24,
+      "type": "floating"
+    },
+    {
+      "x": 2280,
+      "y": 580,
+      "width": 180,
+      "height": 20,
+      "type": "oneway"
+    },
+    {
+      "x": 2500,
+      "y": 720,
+      "width": 1100,
+      "height": 130,
+      "type": "ground"
+    },
+    {
+      "x": 2720,
+      "y": 590,
+      "width": 220,
+      "height": 24,
+      "type": "floating"
+    },
+    {
+      "x": 3020,
+      "y": 500,
+      "width": 200,
+      "height": 24,
+      "type": "floating"
+    },
+    {
+      "x": 3650,
+      "y": 550,
+      "width": 180,
+      "height": 24,
+      "type": "floating"
+    },
+    {
+      "x": 3900,
+      "y": 480,
+      "width": 160,
+      "height": 20,
+      "type": "oneway"
+    },
+    {
+      "x": 4150,
+      "y": 720,
+      "width": 800,
+      "height": 130,
+      "type": "ground"
+    },
+    {
+      "x": 4400,
+      "y": 550,
+      "width": 150,
+      "height": 24,
+      "type": "floating"
+    },
+    {
+      "x": 5000,
+      "y": 720,
+      "width": 700,
+      "height": 130,
+      "type": "ground"
+    }
   ],
   "enemies": [
-    { "x": 500, "y": 680, "type": "web_hero", "patrol": 120 },
-    { "x": 1100, "y": 680, "type": "web_hero", "patrol": 140 },
-    { "x": 1850, "y": 680, "type": "web_hero", "patrol": 100 },
-    { "x": 2150, "y": 680, "type": "armored_hero", "patrol": 120 },
-    { "x": 2800, "y": 680, "type": "web_hero", "patrol": 150 }
+    {
+      "x": 500,
+      "y": 680,
+      "type": "web_hero",
+      "patrol": 120
+    },
+    {
+      "x": 1100,
+      "y": 680,
+      "type": "web_hero",
+      "patrol": 140
+    },
+    {
+      "x": 1850,
+      "y": 680,
+      "type": "web_hero",
+      "patrol": 100
+    },
+    {
+      "x": 2150,
+      "y": 680,
+      "type": "armored_hero",
+      "patrol": 120
+    },
+    {
+      "x": 2800,
+      "y": 680,
+      "type": "web_hero",
+      "patrol": 150
+    },
+    {
+      "x": 3700,
+      "y": 500,
+      "type": "armored_hero",
+      "patrol": 80
+    },
+    {
+      "x": 4200,
+      "y": 680,
+      "type": "dark_knight",
+      "patrol": 150
+    },
+    {
+      "x": 4600,
+      "y": 680,
+      "type": "web_hero",
+      "patrol": 120
+    }
   ],
   "coins": [
-    { "x": 240, "y": 670 },
-    { "x": 280, "y": 670 },
-    { "x": 320, "y": 670 },
-    { "x": 460, "y": 540 },
-    { "x": 500, "y": 540 },
-    { "x": 720, "y": 460 },
-    { "x": 760, "y": 460 },
-    { "x": 1030, "y": 530 },
-    { "x": 1080, "y": 530 },
-    { "x": 1820, "y": 530 },
-    { "x": 2080, "y": 440 },
-    { "x": 2850, "y": 670 },
-    { "x": 2900, "y": 670 },
-    { "x": 3150, "y": 670 }
+    {
+      "x": 240,
+      "y": 670
+    },
+    {
+      "x": 280,
+      "y": 670
+    },
+    {
+      "x": 320,
+      "y": 670
+    },
+    {
+      "x": 460,
+      "y": 540
+    },
+    {
+      "x": 500,
+      "y": 540
+    },
+    {
+      "x": 720,
+      "y": 460
+    },
+    {
+      "x": 760,
+      "y": 460
+    },
+    {
+      "x": 1030,
+      "y": 530
+    },
+    {
+      "x": 1080,
+      "y": 530
+    },
+    {
+      "x": 1820,
+      "y": 530
+    },
+    {
+      "x": 2080,
+      "y": 440
+    },
+    {
+      "x": 2850,
+      "y": 670
+    },
+    {
+      "x": 2900,
+      "y": 670
+    },
+    {
+      "x": 3150,
+      "y": 670
+    },
+    {
+      "x": 3680,
+      "y": 500
+    },
+    {
+      "x": 3920,
+      "y": 430
+    },
+    {
+      "x": 4420,
+      "y": 500
+    }
   ],
   "powerups": [
-    { "x": 710, "y": 460, "type": "health_crystal" },
-    { "x": 1900, "y": 670, "type": "speed_boost" },
-    { "x": 2780, "y": 540, "type": "shield" }
+    {
+      "x": 710,
+      "y": 460,
+      "type": "health_crystal"
+    },
+    {
+      "x": 1900,
+      "y": 670,
+      "type": "speed_boost"
+    },
+    {
+      "x": 2780,
+      "y": 540,
+      "type": "shield"
+    }
   ],
   "checkpoints": [
-    { "x": 1620, "y": 640 }
+    {
+      "x": 1620,
+      "y": 640
+    }
   ]
 }
