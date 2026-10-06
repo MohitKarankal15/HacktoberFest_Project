@@ -56,9 +56,9 @@ def validate_decision(raw_decision, current_state=None):
         return ValidationResult("ACCEPTED", sanitized, "Safe idle action approved.")
 
     elif action == "spawn_enemy":
-        enemy_type = str(raw_decision.get("enemy_type", "walker")).lower()
-        if enemy_type not in ["walker", "chaser", "fast"]:
-            enemy_type = "walker"
+        enemy_type = str(raw_decision.get("enemy_type", "web_hero")).lower()
+        if enemy_type not in ["web_hero", "blast_hero", "dark_hero"]:
+            enemy_type = "web_hero"
         sanitized["enemy_type"] = enemy_type
 
         count = raw_decision.get("count", 1)

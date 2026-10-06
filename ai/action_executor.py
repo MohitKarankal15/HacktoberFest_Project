@@ -32,7 +32,7 @@ def execute_decision(validation_result, game_engine):
         return "Gemma: World stable, observing player."
 
     elif action == "spawn_enemy":
-        enemy_type = decision.get("enemy_type", "walker")
+        enemy_type = decision.get("enemy_type", "web_hero")
         count = decision.get("count", 1)
         # Spawn safely ahead of player
         spawn_base_x = player.x + 380
@@ -128,8 +128,8 @@ def execute_decision(validation_result, game_engine):
                 level.coins.append(Coin(player.x + 80 + i * 40, player.y - 50))
             game_engine.show_notification("⚡ WORLD EVENT: COIN RUSH! ⚡", 4.0, (255, 230, 80))
         elif ename == "enemy_swarm":
-            level.enemies.append(Enemy(player.x + 350, player.y - 20, "walker"))
-            level.enemies.append(Enemy(player.x + 440, player.y - 20, "fast"))
+            level.enemies.append(Enemy(player.x + 350, player.y - 20, "web_hero"))
+            level.enemies.append(Enemy(player.x + 440, player.y - 20, "dark_knight"))
             game_engine.show_notification("⚠️ WORLD EVENT: ENEMY SWARM! ⚠️", 4.0, (255, 80, 80))
         summary = f"World event '{ename}' triggered"
 

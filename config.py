@@ -2,6 +2,11 @@
 Configuration constants for GEMMA WORLD: AI Adaptive Platformer
 """
 import os
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
 
 # Base paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -40,9 +45,16 @@ COLOR_NOVA_ACCENT = (255, 215, 0)   # Golden visor
 COLOR_NOVA_SHIELD = (100, 200, 255) # Translucent aura
 
 # Enemies
-COLOR_WALKER = (180, 60, 200)       # Purple crawler
-COLOR_CHASER = (255, 90, 40)        # Blazing orange stalker
-COLOR_FAST = (240, 30, 80)          # Crimson runner
+COLOR_WEB_HERO = (200, 40, 40)
+COLOR_WEB_BLUE = (40, 60, 200)
+COLOR_ARMORED = (200, 180, 50)
+COLOR_DARK_KNIGHT = (30, 30, 35)
+COLOR_THUNDER = (100, 220, 255)
+COLOR_GREEN_MONSTER = (40, 180, 60)
+COLOR_SPEED_HERO = (255, 80, 30)
+COLOR_VENOM = (180, 60, 200)       # Purple crawler
+COLOR_JOKER = (255, 90, 40)        # Blazing orange stalker
+COLOR_FLASH = (240, 30, 80)          # Crimson runner
 
 # Items & Collectibles
 COLOR_COIN = (255, 215, 0)
@@ -61,13 +73,13 @@ HEALTH_RED = (235, 60, 75)
 AI_ACCENT = (140, 90, 255)         # Gemma Purple
 
 # Physics Constants
-GRAVITY = 0.75
+GRAVITY = 0.6
 TERMINAL_VELOCITY = 15.0
-PLAYER_SPEED = 5.2
-PLAYER_ACCEL = 0.55
+PLAYER_SPEED = 6.0
+PLAYER_ACCEL = 1.0
 PLAYER_FRICTION = 0.82
-JUMP_FORCE = -14.2
-MIN_JUMP_FORCE = -5.5               # Variable height when releasing jump key
+JUMP_FORCE = -16.5
+MIN_JUMP_FORCE = -7.0
 
 # Combat & Stats
 PLAYER_MAX_HEALTH = 100

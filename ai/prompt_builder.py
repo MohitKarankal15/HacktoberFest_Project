@@ -27,7 +27,7 @@ Never return explanations outside JSON.
 
 Allowed actions (ONLY choose ONE of these):
 1. do_nothing
-2. spawn_enemy (params: "enemy_type": "walker"|"chaser"|"fast", "count": 1..3)
+2. spawn_enemy (params: "enemy_type": "web_hero"|"blast_hero"|"dark_hero", "count": 1..3)
 3. spawn_coin (params: "count": 1..5)
 4. spawn_powerup (params: "powerup_type": "health_crystal"|"speed_boost"|"shield"|"magnet")
 5. change_enemy_speed (params: "multiplier": 0.5..2.0)

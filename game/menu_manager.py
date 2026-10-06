@@ -37,8 +37,9 @@ class MenuManager:
         options = [
             ("1. PLAY GAME", "Start Nova's journey"),
             ("2. HOW TO PLAY", "Controls, Power-ups & Enemies"),
-            ("3. AI BRAIN ARCHITECTURE", "Learn how Gemma controls the world"),
-            ("4. QUIT", "Exit to desktop")
+            ("3. AI BRAIN", "Learn how Gemma controls the world"),
+            ("4. SETTINGS", "Configure game options"),
+            ("5. QUIT", "Exit to desktop")
         ]
 
         menu_y = 300

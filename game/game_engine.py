@@ -18,6 +18,8 @@ from game.game_state import GameStateManager
 from game.debug_panel import draw_debug_panel
 from game.menu_manager import MenuManager
 from game.sound_effects import SoundManager
+from game.intro_cinematic import IntroCinematic
+from game.how_to_play import HowToPlayDemo
 from ai.gemma_brain import GemmaBrain
 from ai.action_executor import execute_decision
 from vision.gesture_detector import GestureDetector
@@ -30,7 +32,7 @@ class GameEngine:
         self.clock = pygame.time.Clock()
 
         # Engine state
-        self.state = "menu"  # "menu", "playing", "paused", "howtoplay", "aibrain", "gameover", "victory"
+        self.state = "intro"  # "intro", "menu", "playing", "paused", "howtoplay", "aibrain", "gameover", "victory"
         self.current_level_index = 1
         self.max_levels = 3
 
@@ -49,6 +51,12 @@ class GameEngine:
         self.menu_manager = MenuManager(
             self.font_title, self.font_large, self.font_medium, self.font_small
         )
+        self.intro = IntroCinematic(
+            self.font_title, self.font_large, self.font_medium, self.font_small
+        )
+        self.how_to_play = HowToPlayDemo(
+            self.font_large, self.font_medium, self.font_small
+        )
 
         # AI & Vision Pipelines
         self.gemma_brain = GemmaBrain()
@@ -59,6 +67,7 @@ class GameEngine:
         self.notifications = []  # [{"text": str, "timer": float, "color": tuple}]
         self.show_debug_panel = False
         self.particles = []
+        self.projectiles = []
 
     def show_notification(self, text, duration=3.5, color=AI_ACCENT):
         """Displays floating AI Director notification toast."""
@@ -99,11 +108,16 @@ class GameEngine:
                         self.show_notification("AI: Forcing Gemma Brain observation...", 2.0, (200, 180, 255))
 
                 # Menu state key handling
-                if self.state == "menu":
+                if self.state == "intro":
+                    self.intro.handle_events([event])
+                    if self.intro.is_finished:
+                        self.state = "menu"
+
+                elif self.state == "menu":
                     if event.key in (pygame.K_UP, pygame.K_w):
-                        self.menu_manager.selected_index = (self.menu_manager.selected_index - 1) % 4
+                        self.menu_manager.selected_index = (self.menu_manager.selected_index - 1) % 5
                     elif event.key in (pygame.K_DOWN, pygame.K_s):
-                        self.menu_manager.selected_index = (self.menu_manager.selected_index + 1) % 4
+                        self.menu_manager.selected_index = (self.menu_manager.selected_index + 1) % 5
                     elif event.key == pygame.K_1:
                         self.state = "playing"
                     elif event.key == pygame.K_2:
@@ -111,6 +125,8 @@ class GameEngine:
                     elif event.key == pygame.K_3:
                         self.state = "aibrain"
                     elif event.key == pygame.K_4:
+                        self.state = "menu" # Settings not implemented yet
+                    elif event.key == pygame.K_5:
                         pygame.quit()
                         sys.exit(0)
                     elif event.key in (pygame.K_RETURN, pygame.K_SPACE):
@@ -122,10 +138,17 @@ class GameEngine:
                         elif sel == 2:
                             self.state = "aibrain"
                         elif sel == 3:
+                            pass # Settings not implemented
+                        elif sel == 4:
                             pygame.quit()
                             sys.exit(0)
 
-                elif self.state in ("howtoplay", "aibrain"):
+                elif self.state == "howtoplay":
+                    res = self.how_to_play.handle_events([event])
+                    if res == "back":
+                        self.state = "menu"
+
+                elif self.state == "aibrain":
                     if event.key in (pygame.K_ESCAPE, pygame.K_RETURN, pygame.K_SPACE):
                         self.state = "menu"
 
@@ -133,8 +156,7 @@ class GameEngine:
                     if event.key == pygame.K_ESCAPE:
                         self.state = "paused"
                     elif event.key == pygame.K_SPACE:
-                        if self.player.jump():
-                            self.sounds.play("jump")
+                        self.player.jump_request()
                     elif event.key == pygame.K_c:
                         # Toggle webcam gesture detector
                         if not self.gesture_detector.is_running:
@@ -195,11 +217,13 @@ class GameEngine:
                             player.y = p.rect.top - player.height
                             player.vy = 0
                             player.is_grounded = True
+                            player.coyote_timer = 0.15
                             player_rect = player.rect
                     else:
                         player.y = p.rect.top - player.height
                         player.vy = 0
                         player.is_grounded = True
+                        player.coyote_timer = 0.15
                         player_rect = player.rect
                 elif player.vy < 0 and not p.is_oneway:
                     player.y = p.rect.bottom
@@ -291,6 +315,16 @@ class GameEngine:
 
     def update(self, dt):
         """Main update tick."""
+        if self.state == "intro":
+            self.intro.update(dt)
+            if self.intro.is_finished:
+                self.state = "menu"
+            return
+            
+        if self.state == "howtoplay":
+            self.how_to_play.update(dt)
+            return
+
         if self.state != "playing":
             return
 
@@ -298,6 +332,11 @@ class GameEngine:
         keys = pygame.key.get_pressed()
         self.player.handle_input(keys)
         self.player.update(dt)
+        self.state_manager._last_player_ref = self.player
+        
+        if self.player.check_buffered_jump():
+            self.sounds.play("jump")
+            self.add_particles(self.player.x + self.player.width/2, self.player.y + self.player.height, 10, (200, 200, 200))
 
         self.update_physics(dt)
         self.handle_combat_and_interactions(dt)
@@ -309,6 +348,36 @@ class GameEngine:
         elif event == "checkpoint_reached":
             self.show_notification("CHECKPOINT ACTIVATED!", 2.5, (100, 255, 150))
             self.state_manager.record_event("player completed checkpoint")
+
+        # Collect newly spawned projectiles
+        for enemy in self.level.enemies:
+            if enemy.is_alive and enemy.projectiles_to_spawn:
+                self.projectiles.extend(enemy.projectiles_to_spawn)
+
+        # Update Projectiles & Handle collision
+        from game.projectile import WebProjectile, EnergyBlast, Batarang
+        for proj in self.projectiles:
+            proj.update(dt)
+            if proj.is_active and proj.rect.colliderect(self.player.rect):
+                proj.is_active = False
+                if isinstance(proj, WebProjectile):
+                    self.player.apply_slow(0.5, 3.0)
+                    self.show_notification("WEBBED! SPEED REDUCED!", 2.0, (200, 200, 200))
+                elif isinstance(proj, EnergyBlast):
+                    self.player.take_damage(proj.damage)
+                    # Simple knockback
+                    self.player.vx += 5.0 if proj.vx > 0 else -5.0
+                    self.add_particles(self.player.x + self.player.width/2, self.player.y, 8, (255, 100, 0))
+                    self.sounds.play("hurt")
+                    self.camera.add_shake(5.0)
+                elif isinstance(proj, Batarang):
+                    self.player.take_damage(proj.damage)
+                    self.player.apply_stun(0.4)
+                    self.add_particles(self.player.x + self.player.width/2, self.player.y, 6, (100, 100, 100))
+                    self.sounds.play("hurt")
+                    self.camera.add_shake(4.0)
+
+        self.projectiles = [p for p in self.projectiles if p.is_active]
 
         # Check visual gesture events from webcam if active
         vis_event = self.gesture_detector.get_latest_event()
@@ -436,10 +505,12 @@ class GameEngine:
         self.render_sky()
 
         # If in menu states, render respective UI
-        if self.state == "menu":
+        if self.state == "intro":
+            self.intro.draw(self.screen)
+        elif self.state == "menu":
             self.menu_manager.render_title_menu(self.screen)
         elif self.state == "howtoplay":
-            self.menu_manager.render_how_to_play(self.screen)
+            self.how_to_play.draw(self.screen)
         elif self.state == "aibrain":
             self.menu_manager.render_ai_brain_explainer(self.screen)
         elif self.state in ("playing", "paused", "gameover", "victory"):
@@ -450,12 +521,22 @@ class GameEngine:
             # Draw Level and Entities
             self.level.draw(self.screen, cam_x, cam_y)
             self.player.draw(self.screen, cam_x, cam_y)
+            
+            # Draw enemy names
+            for enemy in self.level.enemies:
+                if enemy.is_alive and cam_x < enemy.x < cam_x + SCREEN_WIDTH:
+                    name_txt = self.font_small.render(enemy.enemy_type.replace('_', ' ').upper(), True, (255, 255, 255))
+                    self.screen.blit(name_txt, (enemy.x - cam_x + (enemy.width - name_txt.get_width()) // 2, enemy.y - cam_y - 20))
 
             # Draw particles
             for p in self.particles:
                 px = int(p[0] - cam_x)
                 py = int(p[1] - cam_y)
                 pygame.draw.circle(self.screen, p[4], (px, py), 3)
+                
+            # Draw projectiles
+            for proj in self.projectiles:
+                proj.draw(self.screen, cam_x, cam_y)
 
             # Draw HUD
             self.render_hud()
@@ -541,6 +622,7 @@ class GameEngine:
         self.state_manager.level = 1
         self.level.load_level(1)
         self.player = Player(self.level.spawn_x, self.level.spawn_y)
+        self.projectiles.clear()
         self.state = "playing"
 
     def run(self):

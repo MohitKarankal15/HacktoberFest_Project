@@ -46,7 +46,7 @@ def generate_fallback_decision(game_state):
         if difficulty < 6:
             return {
                 "action": "spawn_enemy",
-                "enemy_type": "fast" if difficulty >= 4 else "walker",
+                "enemy_type": "dark_knight" if difficulty >= 4 else "web_hero",
                 "count": 1,
                 "reason": "Fallback Director: Player performing well; adding light challenge."
             }

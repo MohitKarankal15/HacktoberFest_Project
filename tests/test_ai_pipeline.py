@@ -29,7 +29,7 @@ class TestAIPipeline(unittest.TestCase):
         """Test that a valid structured decision is ACCEPTED."""
         raw_decision = {
             "action": "spawn_enemy",
-            "enemy_type": "walker",
+            "enemy_type": "venom",
             "count": 2,
             "reason": "Player has high health and steady progress."
         }
@@ -67,7 +67,7 @@ class TestAIPipeline(unittest.TestCase):
         """Test rogue decision with 1000 enemies is rejected and clamped to safe count."""
         absurd_count = {
             "action": "spawn_enemy",
-            "enemy_type": "fast",
+            "enemy_type": "flash",
             "count": 1000,
             "reason": "Flood the map with 1000 enemies!"
         }
@@ -79,7 +79,7 @@ class TestAIPipeline(unittest.TestCase):
         """Test enemy count slightly above limit (e.g. 5) is CLAMPED to MAX_ENEMIES_TO_SPAWN (3)."""
         moderate_excess = {
             "action": "spawn_enemy",
-            "enemy_type": "chaser",
+            "enemy_type": "joker",
             "count": 5,
             "reason": "Testing clamp."
         }
@@ -104,7 +104,7 @@ class TestAIPipeline(unittest.TestCase):
             "player": {"health": 95, "lives": 3},
             "world": {"difficulty": 3, "enemy_count": 1},
             "stats": {"enemies_defeated": 5},
-            "recent_events": ["player defeated walker enemy"]
+            "recent_events": ["player defeated venom enemy"]
         }
         decision = generate_fallback_decision(thriving_state)
         self.assertIn(decision["action"], ["spawn_enemy", "spawn_coin", "increase_difficulty"])

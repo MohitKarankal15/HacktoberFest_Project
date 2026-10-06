@@ -24,6 +24,8 @@ class Player:
         self.vx = 0.0
         self.vy = 0.0
         self.is_grounded = False
+        self.coyote_timer = 0.0
+        self.jump_buffer_timer = 0.0
         self.facing_right = True
 
         # Stats
@@ -40,6 +42,10 @@ class Player:
         self.speed_boost_timer = 0.0
         self.magnet_timer = 0.0
 
+        self.slow_timer = 0.0
+        self.slow_multiplier = 1.0
+        self.stun_timer = 0.0
+
         # Animation state
         self.anim_tick = 0
         self.state = "idle"  # idle, run, jump, hurt
@@ -52,42 +58,46 @@ class Player:
         return pygame.Rect(int(self.x), int(self.y), self.width, self.height)
 
     def handle_input(self, keys):
-        """Processes keyboard input for Nova."""
+        """Processes keyboard input for Nova with instant response."""
+        if self.stun_timer > 0:
+            self.vx = 0.0
+            return
+            
         move_dir = 0
         if keys[pygame.K_a] or keys[pygame.K_LEFT]:
             move_dir -= 1
         if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
             move_dir += 1
 
-        # Calculate max speed with potential power-up
         current_speed = PLAYER_SPEED * (1.5 if self.speed_boost_timer > 0 else 1.0)
-
+        
+        if self.slow_timer > 0:
+            current_speed *= self.slow_multiplier
+        
+        # Instant horizontal velocity
         if move_dir != 0:
-            self.vx += move_dir * PLAYER_ACCEL
-            # Clamp to max speed
-            if self.vx > current_speed:
-                self.vx = current_speed
-            elif self.vx < -current_speed:
-                self.vx = -current_speed
+            self.vx = move_dir * current_speed
             self.facing_right = (move_dir > 0)
         else:
-            # Apply friction when no input
-            self.vx *= PLAYER_FRICTION
-            if abs(self.vx) < 0.1:
-                self.vx = 0.0
+            self.vx = 0.0
 
-    def jump(self):
-        """Initiates jump if grounded."""
-        if self.is_grounded:
-            self.vy = JUMP_FORCE
-            self.is_grounded = False
-            return True
-        return False
+    def jump_request(self):
+        if self.stun_timer <= 0:
+            self.jump_buffer_timer = 0.15
 
     def cut_jump(self):
         """Shortens jump if key released early for variable height."""
         if self.vy < MIN_JUMP_FORCE:
             self.vy = MIN_JUMP_FORCE
+
+    def check_buffered_jump(self):
+        if self.jump_buffer_timer > 0 and (self.is_grounded or self.coyote_timer > 0):
+            self.vy = JUMP_FORCE
+            self.is_grounded = False
+            self.coyote_timer = 0.0
+            self.jump_buffer_timer = 0.0
+            return True
+        return False
 
     def apply_gravity(self):
         """Applies downward gravitational acceleration."""
@@ -100,6 +110,10 @@ class Player:
         self.anim_tick += 1
 
         # Power-up timers
+        if self.coyote_timer > 0:
+            self.coyote_timer = max(0.0, self.coyote_timer - dt)
+        if self.jump_buffer_timer > 0:
+            self.jump_buffer_timer = max(0.0, self.jump_buffer_timer - dt)
         if self.speed_boost_timer > 0:
             self.speed_boost_timer = max(0.0, self.speed_boost_timer - dt)
             # Record trail
@@ -114,6 +128,12 @@ class Player:
             trail[2] -= 15  # Alpha decrease
         self.trails = [t for t in self.trails if t[2] > 0]
 
+        # Status effect timers
+        if self.slow_timer > 0:
+            self.slow_timer = max(0.0, self.slow_timer - dt)
+        if self.stun_timer > 0:
+            self.stun_timer = max(0.0, self.stun_timer - dt)
+
         # Invulnerability timer
         if self.invulnerable_timer > 0:
             self.invulnerable_timer = max(0.0, self.invulnerable_timer - dt)
@@ -123,8 +143,14 @@ class Player:
             self.state = "jump"
         elif abs(self.vx) > 0.4:
             self.state = "run"
-        else:
             self.state = "idle"
+
+    def apply_slow(self, multiplier, duration):
+        self.slow_multiplier = multiplier
+        self.slow_timer = duration
+
+    def apply_stun(self, duration):
+        self.stun_timer = duration
 
     def take_damage(self, amount):
         """Damages player, taking shield into account."""

@@ -59,7 +59,7 @@ class GemmaBrain:
         """
         rogue_decision = {
             "action": "spawn_enemy",
-            "enemy_type": "fast",
+            "enemy_type": "flash",
             "count": 1000,
             "reason": "ROGUE AI TEST: Overwhelming enemy swarm injection."
         }

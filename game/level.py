@@ -7,7 +7,7 @@ import os
 import pygame
 from config import LEVELS_DIR, COLOR_PLATFORM_ACCENT, COLOR_WHITE
 from game.platform import Platform
-from game.enemy import Enemy
+from game.enemy import create_enemy
 from game.coin import Coin
 from game.powerup import PowerUp
 
@@ -67,7 +67,7 @@ class Level:
         self.enemies = []
         for e in data.get("enemies", []):
             self.enemies.append(
-                Enemy(e["x"], e["y"], e.get("type", "walker"), e.get("patrol", 120))
+                create_enemy(e.get("type", "web_hero"), e["x"], e["y"])
             )
 
         # Coins
@@ -94,7 +94,7 @@ class Level:
             Platform(700, 460, 180, 24, "floating"),
             Platform(1500, 540, 180, 24, "floating")
         ]
-        self.enemies = [Enemy(500, 640, "walker"), Enemy(1600, 640, "chaser")]
+        self.enemies = [create_enemy("web_hero", 500, 640), create_enemy("blast_hero", 1600, 640)]
         self.coins = [Coin(450, 490), Coin(750, 410)]
         self.powerups = [PowerUp(800, 410, "health_crystal")]
         self.checkpoints = [{"x": 1400, "y": 640, "reached": False}]

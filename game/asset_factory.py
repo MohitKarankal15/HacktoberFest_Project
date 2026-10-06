@@ -6,7 +6,7 @@ for Nova, enemies, tiles, and power-up items.
 import pygame
 from config import (
     COLOR_NOVA, COLOR_NOVA_ACCENT, COLOR_NOVA_SHIELD,
-    COLOR_WALKER, COLOR_CHASER, COLOR_FAST,
+    COLOR_VENOM, COLOR_JOKER, COLOR_FLASH,
     COLOR_COIN, COLOR_COIN_GLOW,
     COLOR_HEALTH_CRYSTAL, COLOR_SPEED_BOOST, COLOR_SHIELD, COLOR_MAGNET,
     COLOR_GROUND, COLOR_DIRT, COLOR_PLATFORM, COLOR_PLATFORM_ACCENT,
@@ -57,40 +57,42 @@ def create_nova_surface(width=40, height=52, facing_right=True, state="idle", fr
 
     return surf
 
-def create_enemy_surface(enemy_type="walker", width=40, height=40, frame_tick=0):
-    """Generates procedural sprite for original enemies."""
+def create_enemy_surface(enemy_type="web_hero", width=40, height=40, frame_tick=0):
     surf = pygame.Surface((width, height), pygame.SRCALPHA)
+    from config import COLOR_WEB_HERO, COLOR_WEB_BLUE, COLOR_ARMORED, COLOR_DARK_KNIGHT, COLOR_THUNDER, COLOR_GREEN_MONSTER, COLOR_SPEED_HERO
     
-    if enemy_type == "walker":
-        # Purple bio-mechanical crawler with spiked armor
-        pygame.draw.ellipse(surf, COLOR_WALKER, (4, 10, 32, 26))
-        pygame.draw.ellipse(surf, (110, 30, 130), (8, 14, 24, 18))
-        # Glowing eye
-        eye_x = 26 if (frame_tick // 15) % 2 == 0 else 24
-        pygame.draw.circle(surf, (255, 240, 80), (eye_x, 22), 4)
-        pygame.draw.circle(surf, (20, 20, 20), (eye_x + 1, 22), 2)
-        # Antenna / spikes
-        pygame.draw.line(surf, COLOR_WALKER, (12, 10), (8, 2), 2)
-        pygame.draw.line(surf, COLOR_WALKER, (28, 10), (32, 2), 2)
-
-    elif enemy_type == "chaser":
-        # Blazing orange angular stalker drone
-        pts = [(20, 4), (36, 32), (20, 26), (4, 32)]
-        pygame.draw.polygon(surf, COLOR_CHASER, pts)
-        pygame.draw.polygon(surf, (255, 180, 50), [(20, 10), (30, 28), (20, 24), (10, 28)])
-        # Heat thruster flame
-        flame_len = 30 + (frame_tick * 4) % 8
-        pygame.draw.line(surf, (255, 255, 100), (20, 26), (20, flame_len), 3)
-
-    elif enemy_type == "fast":
-        # Aerodynamic Crimson hover-blade
-        pygame.draw.ellipse(surf, COLOR_FAST, (2, 12, 36, 16))
-        pygame.draw.line(surf, (255, 120, 150), (2, 20), (38, 20), 2)
-        # Razor tip
-        pygame.draw.polygon(surf, (255, 220, 230), [(38, 20), (30, 14), (30, 26)])
+    if enemy_type == "web_hero":
+        pygame.draw.ellipse(surf, COLOR_WEB_BLUE, (4, 4, width-8, height-8))
+        pygame.draw.rect(surf, COLOR_WEB_HERO, (width//2 - 6, 0, 12, height))
+        pygame.draw.circle(surf, (255, 255, 255), (width//2 + 4, height//2 - 4), 5)
+        
+    elif enemy_type == "armored_hero":
+        pygame.draw.rect(surf, COLOR_ARMORED, (2, 2, width-4, height-4), border_radius=4)
+        pygame.draw.rect(surf, (200, 40, 40), (8, 10, width-16, height-20))
+        # glowing arc reactor
+        pygame.draw.circle(surf, (150, 255, 255), (width//2, height//2), 6)
+        
+    elif enemy_type == "dark_knight":
+        pygame.draw.polygon(surf, COLOR_DARK_KNIGHT, [(width//2, 0), (width, height), (0, height)])
+        pygame.draw.polygon(surf, (50, 50, 60), [(width//2, 10), (width-6, height-4), (6, height-4)])
+        pygame.draw.ellipse(surf, (255, 255, 255), (width//2 + 2, 16, 6, 4))
+        
+    elif enemy_type == "thunder_hero":
+        pygame.draw.rect(surf, (30, 30, 40), (4, 4, width-8, height-8), border_radius=8)
+        pygame.draw.circle(surf, (200, 200, 200), (width//2, height//2 - 4), 10)
+        # lightning bolt
+        pts = [(width//2 + 2, height//2 - 8), (width//2 - 4, height//2), (width//2 + 2, height//2), (width//2 - 2, height//2 + 8)]
+        pygame.draw.lines(surf, COLOR_THUNDER, False, pts, 2)
+        
+    elif enemy_type == "green_monster":
+        pygame.draw.rect(surf, COLOR_GREEN_MONSTER, (0, 10, width, height-10), border_radius=6)
+        pygame.draw.rect(surf, (100, 50, 150), (2, height//2 + 4, width-4, height//2 - 4))
+        
+    elif enemy_type == "speed_hero":
+        pygame.draw.ellipse(surf, COLOR_SPEED_HERO, (0, height//2 - 6, width, 12))
+        pygame.draw.circle(surf, (255, 200, 50), (width//2 + 4, height//2), 4)
 
     return surf
-
 def create_item_surface(item_type="coin", size=28, frame_tick=0):
     """Generates procedural sprite for collectibles and power-ups."""
     surf = pygame.Surface((size, size), pygame.SRCALPHA)

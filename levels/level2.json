@@ -24,14 +24,14 @@
     { "x": 3650, "y": 570, "width": 220, "height": 24, "type": "floating" }
   ],
   "enemies": [
-    { "x": 450, "y": 770, "type": "walker", "patrol": 100 },
-    { "x": 700, "y": 510, "type": "fast", "patrol": 70 },
-    { "x": 1350, "y": 770, "type": "chaser", "patrol": 150 },
-    { "x": 1620, "y": 500, "type": "fast", "patrol": 80 },
-    { "x": 2400, "y": 770, "type": "chaser", "patrol": 140 },
-    { "x": 2650, "y": 530, "type": "walker", "patrol": 70 },
-    { "x": 3400, "y": 770, "type": "chaser", "patrol": 160 },
-    { "x": 3700, "y": 520, "type": "fast", "patrol": 100 }
+    { "x": 450, "y": 770, "type": "web_hero", "patrol": 100 },
+    { "x": 700, "y": 510, "type": "dark_knight", "patrol": 70 },
+    { "x": 1350, "y": 770, "type": "armored_hero", "patrol": 150 },
+    { "x": 1620, "y": 500, "type": "dark_knight", "patrol": 80 },
+    { "x": 2400, "y": 770, "type": "armored_hero", "patrol": 140 },
+    { "x": 2650, "y": 530, "type": "web_hero", "patrol": 70 },
+    { "x": 3400, "y": 770, "type": "armored_hero", "patrol": 160 },
+    { "x": 3700, "y": 520, "type": "dark_knight", "patrol": 100 }
   ],
   "coins": [
     { "x": 420, "y": 630 },

@@ -21,11 +21,11 @@
     { "x": 3020, "y": 500, "width": 200, "height": 24, "type": "floating" }
   ],
   "enemies": [
-    { "x": 500, "y": 680, "type": "walker", "patrol": 120 },
-    { "x": 1100, "y": 680, "type": "walker", "patrol": 140 },
-    { "x": 1850, "y": 680, "type": "walker", "patrol": 100 },
-    { "x": 2150, "y": 680, "type": "chaser", "patrol": 120 },
-    { "x": 2800, "y": 680, "type": "walker", "patrol": 150 }
+    { "x": 500, "y": 680, "type": "web_hero", "patrol": 120 },
+    { "x": 1100, "y": 680, "type": "web_hero", "patrol": 140 },
+    { "x": 1850, "y": 680, "type": "web_hero", "patrol": 100 },
+    { "x": 2150, "y": 680, "type": "armored_hero", "patrol": 120 },
+    { "x": 2800, "y": 680, "type": "web_hero", "patrol": 150 }
   ],
   "coins": [
     { "x": 240, "y": 670 },
